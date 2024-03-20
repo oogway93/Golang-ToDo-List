@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	"log"
 	"os"
 	"todo_list"
@@ -11,17 +12,29 @@ import (
 )
 
 func main() {
-	repos := repository.NewRepository()
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	PORT := os.Getenv("PORT")
+	db, err := repository.NewPostgresDB(repository.Config{
+		Username: os.Getenv("DB_USERNAME"),
+		Password: os.Getenv("DB_PASSWORD"),
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		DBName:   os.Getenv("DB_NAME"),
+		SSLMode:  os.Getenv("DB_SSLMode"),
+	})
+
+	if err != nil {
+		log.Fatalf("Failed to initialized db: %s", err.Error())
+	}
+
+	repos := repository.NewRepository(db)
 	services := service2.NewService(repos)
 	handlers := handler_todo.NewHandler(services)
 
 	server := new(todo_list.Server)
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	PORT := os.Getenv("PORT")
 	if err := server.Run(PORT, handlers.InitRoutes()); err != nil {
 		log.Fatalf("Some errors %s", err.Error())
 	}
