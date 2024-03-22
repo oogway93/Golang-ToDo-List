@@ -1,22 +1,56 @@
 package handler_todo
 
+import "C"
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
+	"todo_list/structs"
 )
 
+type getAllListsResponse struct {
+	Data []structs.ToDo `json:"data"`
+}
+
 func (h *Handler) getList(c *gin.Context) {
-	c.String(http.StatusOK, "asdasdasd")
+	lists, err := h.services.TodoList.GetAll()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, getAllListsResponse{
+		Data: lists,
+	})
 }
 
 func (h *Handler) createList(c *gin.Context) {
+	var itemList structs.ToDo
 
+	if err := c.BindJSON(&itemList); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	err := h.services.Create(itemList)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	output := successMessageResponse()
+	c.JSON(http.StatusOK, output)
 }
 
 func (h *Handler) getListByID(c *gin.Context) {
+	itemId, _ := strconv.Atoi(c.Param("id"))
 
+	list, err := h.services.GetById(itemId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, list)
 }
-
 func (h *Handler) updateList(c *gin.Context) {
 
 }

@@ -5,6 +5,10 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const (
+	listTableName = "todo_list"
+)
+
 type Config struct {
 	Username string
 	Password string

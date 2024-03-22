@@ -1,8 +1,14 @@
 package service
 
-import "todo_list/repository"
+import (
+	"todo_list/repository"
+	"todo_list/structs"
+)
 
 type TodoList interface {
+	GetAll() ([]structs.ToDo, error)
+	GetById(itemId int) (structs.ToDo, error)
+	Create(itemList structs.ToDo) error
 }
 
 type Service struct {
@@ -10,5 +16,7 @@ type Service struct {
 }
 
 func NewService(repository *repository.Repository) *Service {
-	return new(Service)
+	return &Service{
+		TodoList: NewTodoListService(repository.TodoList),
+	}
 }

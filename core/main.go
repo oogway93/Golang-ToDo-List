@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"log"
+	"github.com/sirupsen/logrus"
 	"os"
 	"todo_list"
 	handler_todo "todo_list/handler"
@@ -12,8 +12,9 @@ import (
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+		logrus.Fatal("Error loading .env file")
 	}
 	PORT := os.Getenv("PORT")
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -26,17 +27,16 @@ func main() {
 	})
 
 	if err != nil {
-		log.Fatalf("Failed to initialized db: %s", err.Error())
+		logrus.Fatalf("Failed to initialized db: %s", err.Error())
 	}
 
-	repos := repository.NewRepository(db)
-	services := service2.NewService(repos)
-	handlers := handler_todo.NewHandler(services)
+	repos := repository.NewRepository(db)         // db layer
+	services := service2.NewService(repos)        // business layer
+	handlers := handler_todo.NewHandler(services) // http/handlers layer
 
 	server := new(todo_list.Server)
 
 	if err := server.Run(PORT, handlers.InitRoutes()); err != nil {
-		log.Fatalf("Some errors %s", err.Error())
+		logrus.Fatalf("Some errors %s", err.Error())
 	}
-
 }
