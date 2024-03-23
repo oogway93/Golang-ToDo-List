@@ -5,6 +5,10 @@ type ToDo struct {
 	Title       string `json:"title" db:"title" binding:"required"`
 	Description string `json:"description" db:"description"`
 }
+type ToDoAdd struct {
+	Title       string `json:"title" db:"title" binding:"required"`
+	Description string `json:"description" db:"description"`
+}
 
 type UpdateToDo struct {
 	Title       *string `json:"title" db:"title"`
@@ -23,9 +27,3 @@ type ListToDoItems struct {
 	ToDoId     int
 	ToDoItemId int
 }
-
-//type ListToDoItems struct {
-//	Id         int `json:"id" db:"id"`
-//	ToDoId     int `json:"todoId" db:"todoId"`
-//	ToDoItemId int `json:"todoItemId" db:"todoItemId"`
-//}

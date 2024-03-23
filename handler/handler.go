@@ -2,6 +2,9 @@ package handler_todo
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "todo_list/docs"
 	"todo_list/service"
 )
 
@@ -32,7 +35,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				item.POST("/", h.createItem)
 			}
 		}
-
 	}
+	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	return route
 }

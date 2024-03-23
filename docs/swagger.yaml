@@ -1,0 +1,251 @@
+basePath: /
+definitions:
+  handler_todo.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler_todo.getAllListsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/structs.ToDo'
+        type: array
+    type: object
+  handler_todo.statusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+  structs.ListToDoItems:
+    properties:
+      id:
+        type: integer
+      toDoId:
+        type: integer
+      toDoItemId:
+        type: integer
+    type: object
+  structs.ToDo:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  structs.ToDoAdd:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  structs.UpdateToDo:
+    properties:
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: The simple ToDo List App
+  title: ToDo List
+  version: "1.0"
+paths:
+  /api/list:
+    get:
+      consumes:
+      - application/json
+      description: Getting ALl ToDo List
+      operationId: get-all-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.getAllListsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Get All ToDo List
+      tags:
+      - list
+    post:
+      consumes:
+      - application/json
+      description: Create ToDo List
+      operationId: create-list
+      parameters:
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/structs.ToDoAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Create ToDo List
+      tags:
+      - list
+  /api/list/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Certain ToDo List By Id
+      operationId: delete-list
+      parameters:
+      - description: ToDo List Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Delete ToDo List
+      tags:
+      - list
+    get:
+      consumes:
+      - application/json
+      description: Get Certain ToDo List By Id
+      operationId: get-list-by-id
+      parameters:
+      - description: ToDo List Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.ListToDoItems'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Get ToDo List
+      tags:
+      - list
+    put:
+      consumes:
+      - application/json
+      description: Update ToDo List By Id
+      operationId: update-list
+      parameters:
+      - description: ToDo List Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/structs.UpdateToDo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Update ToDo List
+      tags:
+      - list
+swagger: "2.0"

@@ -11,6 +11,12 @@ import (
 	service2 "todo_list/service"
 )
 
+// @title ToDo List
+// @version 1.0
+// @description The simple ToDo List App
+
+// @host localhost:8000
+// @BasePath /
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := godotenv.Load(); err != nil {

@@ -65,7 +65,7 @@ func (r *TodoListPostgres) Update(itemId int, itemList structs.UpdateToDo) error
 	}
 	queryValues := strings.Join(values, ", ")
 	query := fmt.Sprintf("UPDATE %s ti SET %s WHERE ti.id=$%d;",
-		listTableName, queryValues, itemId)
+		listTableName, queryValues, order)
 	args = append(args, itemId)
 	_, err := r.db.Exec(query, args...)
 	return err
