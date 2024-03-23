@@ -5,3 +5,8 @@ type ToDo struct {
 	Title       string `json:"title" db:"title" binding:"required"`
 	Description string `json:"description" db:"description"`
 }
+
+type UpdateToDo struct {
+	Title       *string `json:"title" db:"title"`
+	Description *string `json:"description" db:"description"`
+}

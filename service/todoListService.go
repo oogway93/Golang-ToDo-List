@@ -24,3 +24,8 @@ func (s *TodoListService) GetById(itemId int) (structs.ToDo, error) {
 func (s *TodoListService) Create(itemList structs.ToDo) error {
 	return s.repo.Create(itemList)
 }
+
+func (s *TodoListService) Delete(itemId int) error { return s.repo.Delete(itemId) }
+func (s *TodoListService) Update(itemId int, itemList structs.UpdateToDo) error {
+	return s.repo.Update(itemId, itemList)
+}

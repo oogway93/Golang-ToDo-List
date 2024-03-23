@@ -52,9 +52,29 @@ func (h *Handler) getListByID(c *gin.Context) {
 	c.JSON(http.StatusOK, list)
 }
 func (h *Handler) updateList(c *gin.Context) {
+	itemId, _ := strconv.Atoi(c.Param("id"))
 
+	var updatedListItem structs.UpdateToDo
+	if err := c.BindJSON(&updatedListItem); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if err := h.services.Update(itemId, updatedListItem); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	output := successMessageResponse()
+	c.JSON(http.StatusOK, output)
 }
 
 func (h *Handler) deleteList(c *gin.Context) {
+	itemId, _ := strconv.Atoi(c.Param("id"))
 
+	err := h.services.Delete(itemId)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	output := successMessageResponse()
+	c.JSON(http.StatusOK, output)
 }
