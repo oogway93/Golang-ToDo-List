@@ -26,4 +26,21 @@ func (h *Handler) getItem(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
-func (h *Handler) createItem(c *gin.Context) {}
+func (h *Handler) createItem(c *gin.Context) {
+	var item structs.ToDoItem
+
+	if err := c.BindJSON(&item); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	listId, _ := strconv.Atoi(c.Param("id"))
+
+	err := h.services.ToDoItem.Create(listId, item)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	output := successMessageResponse()
+	c.JSON(http.StatusOK, output)
+}

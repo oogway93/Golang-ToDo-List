@@ -32,7 +32,7 @@ func (h *Handler) createList(c *gin.Context) {
 		return
 	}
 
-	err := h.services.Create(itemList)
+	err := h.services.ToDoList.Create(itemList)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

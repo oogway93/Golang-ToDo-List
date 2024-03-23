@@ -23,3 +23,29 @@ func (r *ToDoItemPostgres) GetAll(listId int) ([]structs.ToDoItem, error) {
 	}
 	return items, nil
 }
+
+func (r *ToDoItemPostgres) Create(listId int, item structs.ToDoItem) error {
+	tx, err := r.db.Begin()
+	if err != nil {
+		return err
+	}
+
+	var itemId int
+	createItemQuery := fmt.Sprintf("INSERT INTO %s (title, description) values ($1, $2) RETURNING id", itemTableName)
+
+	row := tx.QueryRow(createItemQuery, item.Title, item.Description)
+	err = row.Scan(&itemId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	createListItemsQuery := fmt.Sprintf("INSERT INTO %s (list_id, item_id) values ($1, $2)", listItemsTableName)
+	_, err = tx.Exec(createListItemsQuery, listId, itemId)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit()
+}
