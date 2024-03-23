@@ -13,7 +13,7 @@ type getAllListsResponse struct {
 }
 
 func (h *Handler) getList(c *gin.Context) {
-	lists, err := h.services.TodoList.GetAll()
+	lists, err := h.services.ToDoList.GetAll()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

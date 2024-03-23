@@ -25,7 +25,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			list.GET("/:id", h.getListByID)
 			list.PUT("/:id", h.updateList)
 			list.DELETE("/:id", h.deleteList)
+
+			item := list.Group(":id/item")
+			{
+				item.GET("/", h.getItem)
+				item.POST("/", h.createItem)
+			}
 		}
+
 	}
 	return route
 }

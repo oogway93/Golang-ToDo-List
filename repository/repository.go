@@ -5,7 +5,7 @@ import (
 	"todo_list/structs"
 )
 
-type TodoList interface {
+type ToDoList interface {
 	GetAll() ([]structs.ToDo, error)
 	GetById(itemId int) (structs.ToDo, error)
 	Create(itemList structs.ToDo) error
@@ -13,12 +13,18 @@ type TodoList interface {
 	Update(itemId int, itemList structs.UpdateToDo) error
 }
 
+type ToDoItem interface {
+	GetAll(listId int) ([]structs.ToDoItem, error)
+}
+
 type Repository struct {
-	TodoList
+	ToDoList
+	ToDoItem
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		TodoList: NewTodoListPostgres(db),
+		ToDoList: NewToDoListPostgres(db),
+		ToDoItem: NewToDoItemPostgres(db),
 	}
 }

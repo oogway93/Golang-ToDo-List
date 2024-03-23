@@ -6,7 +6,9 @@ import (
 )
 
 const (
-	listTableName = "todo_list"
+	listTableName      = "todo_list"
+	itemTableName      = "todo_item"
+	listItemsTableName = "todo_list_items"
 )
 
 type Config struct {
