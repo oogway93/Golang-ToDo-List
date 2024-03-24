@@ -7,10 +7,6 @@ import (
 	"todo_list/structs"
 )
 
-type getAllItemsResponse struct {
-	Data []structs.ToDoItem `json:"data"`
-}
-
 func (h *Handler) getItem(c *gin.Context) {
 	listId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

@@ -13,6 +13,10 @@ type statusResponse struct {
 	Status string `json:"status"`
 }
 
+type statusAuthResponse struct {
+	Status string `json:"status"`
+}
+
 func newErrorResponse(c *gin.Context, statusCode int, message string) {
 	logrus.Error(message)
 	c.AbortWithStatusJSON(statusCode, errorResponse{message})
@@ -20,5 +24,10 @@ func newErrorResponse(c *gin.Context, statusCode int, message string) {
 
 func successMessageResponse() *statusResponse {
 	response := &statusResponse{"success"}
+	return response
+}
+
+func authMessageResponse() *statusAuthResponse {
+	response := &statusAuthResponse{"Authentication is success"}
 	return response
 }

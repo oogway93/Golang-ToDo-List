@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	userTableName      = "users"
 	listTableName      = "todo_list"
 	itemTableName      = "todo_item"
 	listItemsTableName = "todo_list_items"

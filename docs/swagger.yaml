@@ -12,6 +12,11 @@ definitions:
           $ref: '#/definitions/structs.ToDo'
         type: array
     type: object
+  handler_todo.statusAuthResponse:
+    properties:
+      status:
+        type: string
+    type: object
   handler_todo.statusResponse:
     properties:
       status:
@@ -52,6 +57,16 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  structs.UserAdd:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
     type: object
 host: localhost:8000
 info:
@@ -248,4 +263,43 @@ paths:
       summary: Update ToDo List
       tags:
       - list
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      operationId: create-user
+      parameters:
+      - description: user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/structs.UserAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusAuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Create User
+      tags:
+      - auth
 swagger: "2.0"

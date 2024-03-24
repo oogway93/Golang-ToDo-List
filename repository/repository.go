@@ -18,14 +18,20 @@ type ToDoItem interface {
 	Create(listId int, item structs.ToDoItem) error
 }
 
+type User interface {
+	SignUp(user structs.UserAdd) error
+}
+
 type Repository struct {
 	ToDoList
 	ToDoItem
+	User
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		ToDoList: NewToDoListPostgres(db),
 		ToDoItem: NewToDoItemPostgres(db),
+		User:     NewAuthPostgres(db),
 	}
 }

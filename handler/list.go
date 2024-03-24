@@ -1,6 +1,5 @@
 package handler_todo
 
-import "C"
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
