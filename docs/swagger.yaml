@@ -71,6 +71,32 @@ definitions:
     required:
     - title
     type: object
+  structs.ToDoItem:
+    properties:
+      description:
+        type: string
+      done:
+        default: false
+        type: boolean
+      id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  structs.ToDoItemAdd:
+    properties:
+      description:
+        type: string
+      done:
+        default: false
+        type: boolean
+      title:
+        type: string
+    required:
+    - title
+    type: object
   structs.UpdateToDo:
     properties:
       description:
@@ -115,7 +141,7 @@ paths:
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get All ToDo List
       tags:
       - list
@@ -155,7 +181,7 @@ paths:
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Create ToDo List
       tags:
       - list
@@ -195,7 +221,7 @@ paths:
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Delete ToDo List
       tags:
       - list
@@ -234,7 +260,7 @@ paths:
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Get ToDo List
       tags:
       - list
@@ -279,10 +305,97 @@ paths:
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: Update ToDo List
       tags:
       - list
+  /api/list/{id}/item:
+    get:
+      consumes:
+      - application/json
+      description: Get ToDo Item Of List
+      operationId: get-item
+      parameters:
+      - description: ToDo Item Of List Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/structs.ToDoItem'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get ToDo Item Of List
+      tags:
+      - item
+    post:
+      consumes:
+      - application/json
+      description: Create ToDo Item of List
+      operationId: create-item
+      parameters:
+      - description: ToDo Item Of List Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: list info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/structs.ToDoItemAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create ToDo Item of List
+      tags:
+      - item
   /auth/sign-in:
     post:
       consumes:
@@ -362,7 +475,8 @@ paths:
       tags:
       - auth
 securityDefinitions:
-  ApiKeyAuth:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey

@@ -21,6 +21,7 @@ type ToDoItem interface {
 type User interface {
 	CreateUser(user structs.User) error
 	GenerateToken(username, password string) (string, error)
+	ParseToken(accessToken string) (int, error)
 }
 
 type Service struct {

@@ -34,13 +34,13 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	//userId, err := h.services.User.ParseToken(headerParts[1])
-	//if err != nil {
-	//	newErrorResponse(c, http.StatusUnauthorized, err.Error())
-	//	return
-	//}
+	userId, err := h.services.User.ParseToken(headerParts[1])
+	if err != nil {
+		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
 
-	//c.Set(userCtx, userId)
+	c.Set(userCtx, userId)
 }
 
 func GetUserId(c *gin.Context) (int, error) {
