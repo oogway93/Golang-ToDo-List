@@ -14,7 +14,7 @@ func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
 
-func (r *AuthPostgres) SignUp(user structs.UserAdd) error {
+func (r *AuthPostgres) CreateUser(user structs.User) error {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return err
@@ -27,4 +27,12 @@ func (r *AuthPostgres) SignUp(user structs.UserAdd) error {
 		return err
 	}
 	return tx.Commit()
+}
+
+func (r *AuthPostgres) GetUser(username, password string) (structs.User, error) {
+	var user structs.User
+
+	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password=$2", userTableName)
+	err := r.db.Get(&user, query, username, password)
+	return user, err
 }

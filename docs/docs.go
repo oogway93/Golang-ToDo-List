@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/list": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Getting ALl ToDo List",
                 "consumes": [
                     "application/json"
@@ -63,6 +68,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create ToDo List",
                 "consumes": [
                     "application/json"
@@ -122,6 +132,11 @@ const docTemplate = `{
         },
         "/api/list/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get Certain ToDo List By Id",
                 "consumes": [
                     "application/json"
@@ -177,6 +192,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update ToDo List By Id",
                 "consumes": [
                     "application/json"
@@ -241,6 +261,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete Certain ToDo List By Id",
                 "consumes": [
                     "application/json"
@@ -296,9 +321,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/sign-up": {
+        "/auth/sign-in": {
             "post": {
-                "description": "Create User",
+                "description": "Sign In User",
                 "consumes": [
                     "application/json"
                 ],
@@ -308,8 +333,8 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "Create User",
-                "operationId": "create-user",
+                "summary": "Sign In User",
+                "operationId": "signIn-user",
                 "parameters": [
                     {
                         "description": "user info",
@@ -317,7 +342,66 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/structs.UserAdd"
+                            "$ref": "#/definitions/structs.SignInUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler_todo.statusAuthResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler_todo.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler_todo.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler_todo.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler_todo.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/sign-up": {
+            "post": {
+                "description": "Sign Up User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Sign Up User",
+                "operationId": "signUp-user",
+                "parameters": [
+                    {
+                        "description": "user info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/structs.SignUpUser"
                         }
                     }
                 ],
@@ -406,6 +490,36 @@ const docTemplate = `{
                 }
             }
         },
+        "structs.SignInUser": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "structs.SignUpUser": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "structs.ToDo": {
             "type": "object",
             "required": [
@@ -447,21 +561,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "structs.UserAdd": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

@@ -12,6 +12,7 @@ type getAllListsResponse struct {
 }
 
 // @Summary Get All ToDo List
+// @Security ApiKeyAuth
 // @Tags list
 // @Description Getting ALl ToDo List
 // @ID get-all-list
@@ -23,6 +24,11 @@ type getAllListsResponse struct {
 // @Failure default {object} errorResponse
 // @Router /api/list [get]
 func (h *Handler) getList(c *gin.Context) {
+	//userId, err := GetUserId(c)
+	//if err != nil {
+	//	newErrorResponse(c, http.StatusInternalServerError, err.Error())
+	//	return
+	//}
 	lists, err := h.services.ToDoList.GetAll()
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -35,6 +41,7 @@ func (h *Handler) getList(c *gin.Context) {
 }
 
 // @Summary Create ToDo List
+// @Security ApiKeyAuth
 // @Tags list
 // @Description Create ToDo List
 // @ID create-list
@@ -64,6 +71,7 @@ func (h *Handler) createList(c *gin.Context) {
 }
 
 // @Summary Get ToDo List
+// @Security ApiKeyAuth
 // @Tags list
 // @Description Get Certain ToDo List By Id
 // @ID get-list-by-id
@@ -87,6 +95,7 @@ func (h *Handler) getListByID(c *gin.Context) {
 }
 
 // @Summary Update ToDo List
+// @Security ApiKeyAuth
 // @Tags list
 // @Description Update ToDo List By Id
 // @ID update-list
@@ -116,6 +125,7 @@ func (h *Handler) updateList(c *gin.Context) {
 }
 
 // @Summary Delete ToDo List
+// @Security ApiKeyAuth
 // @Tags list
 // @Description Delete Certain ToDo List By Id
 // @ID delete-list

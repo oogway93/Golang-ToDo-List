@@ -31,6 +31,26 @@ definitions:
       toDoItemId:
         type: integer
     type: object
+  structs.SignInUser:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  structs.SignUpUser:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   structs.ToDo:
     properties:
       description:
@@ -57,16 +77,6 @@ definitions:
         type: string
       title:
         type: string
-    type: object
-  structs.UserAdd:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    required:
-    - password
-    - username
     type: object
 host: localhost:8000
 info:
@@ -104,6 +114,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get All ToDo List
       tags:
       - list
@@ -142,6 +154,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create ToDo List
       tags:
       - list
@@ -180,6 +194,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete ToDo List
       tags:
       - list
@@ -217,6 +233,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get ToDo List
       tags:
       - list
@@ -260,22 +278,24 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update ToDo List
       tags:
       - list
-  /auth/sign-up:
+  /auth/sign-in:
     post:
       consumes:
       - application/json
-      description: Create User
-      operationId: create-user
+      description: Sign In User
+      operationId: signIn-user
       parameters:
       - description: user info
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/structs.UserAdd'
+          $ref: '#/definitions/structs.SignInUser'
       produces:
       - application/json
       responses:
@@ -299,7 +319,51 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/handler_todo.errorResponse'
-      summary: Create User
+      summary: Sign In User
       tags:
       - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Sign Up User
+      operationId: signUp-user
+      parameters:
+      - description: user info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/structs.SignUpUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler_todo.statusAuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler_todo.errorResponse'
+      summary: Sign Up User
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

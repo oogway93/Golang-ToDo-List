@@ -19,7 +19,8 @@ type ToDoItem interface {
 }
 
 type User interface {
-	SignUp(user structs.UserAdd) error
+	CreateUser(user structs.User) error
+	GetUser(username, password string) (structs.User, error)
 }
 
 type Repository struct {
