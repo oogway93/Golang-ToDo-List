@@ -4,7 +4,8 @@ import (
 	"crypto/sha512"
 	"errors"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
+	//"github.com/golang-jwt/jwt/v5"
+	"github.com/dgrijalva/jwt-go"
 	"time"
 	"todo_list/repository"
 	"todo_list/structs"
@@ -17,8 +18,8 @@ const (
 )
 
 type tokenClaims struct {
-	jwt.MapClaims
-	UserId int `json:"user_id"`
+	jwt.StandardClaims
+	UserId int
 }
 
 type AuthService struct {
@@ -40,12 +41,10 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		return "", err
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
-		jwt.MapClaims{
-			"ExpiresAt": time.Now().Add(tokenTTL).Unix(),
-			"IssuedAt":  time.Now().Unix(),
-			"Id":        user.Id,
-		})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
+		jwt.StandardClaims{ExpiresAt: time.Now().Add(tokenTTL).Unix(),
+			IssuedAt: time.Now().Unix()},
+		user.Id})
 	return token.SignedString([]byte(key))
 }
 

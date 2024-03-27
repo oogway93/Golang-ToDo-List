@@ -3,12 +3,9 @@ package handler_todo
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
-)
-
-const (
-	listID = "id"
 )
 
 const (
@@ -43,13 +40,14 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	c.Set(userCtx, userId)
 }
 
-func GetUserId(c *gin.Context) (int, error) {
-	id, ok := c.Get(listID)
+func getUserId(c *gin.Context) (int, error) {
+	id, ok := c.Get(userCtx)
 	if !ok {
 		return 0, errors.New("id not found")
 	}
-
+	logrus.Println(id)
 	idInt, ok := id.(int)
+	logrus.Println(idInt)
 	if !ok {
 		return 0, errors.New("id is of invalid type")
 	}

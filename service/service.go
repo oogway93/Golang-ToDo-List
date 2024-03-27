@@ -6,11 +6,11 @@ import (
 )
 
 type ToDoList interface {
-	GetAll() ([]structs.ToDo, error)
-	GetById(itemId int) (structs.ToDo, error)
-	Create(itemList structs.ToDo) error
-	Delete(itemId int) error
-	Update(itemId int, itemList structs.UpdateToDo) error
+	GetAll(userId int) ([]structs.ToDo, error)
+	GetById(userId int, itemId int) (structs.ToDo, error)
+	Create(userId int, itemList structs.ToDo) error
+	Delete(userId, itemId int) error
+	Update(userId, itemId int, itemList structs.UpdateToDo) error
 }
 
 type ToDoItem interface {

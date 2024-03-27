@@ -15,41 +15,52 @@ func NewToDoListPostgres(db *sqlx.DB) *TodoListPostgres {
 	return &TodoListPostgres{db: db}
 }
 
-func (r *TodoListPostgres) GetAll() ([]structs.ToDo, error) {
+func (r *TodoListPostgres) GetAll(userId int) ([]structs.ToDo, error) {
 	var items []structs.ToDo
 
-	query := fmt.Sprintf("SELECT * FROM %s;", listTableName)
-	if err := r.db.Select(&items, query); err != nil {
-		return items, err
+	query := fmt.Sprintf("SELECT * FROM %s tl INNER JOIN %s ul ON tl.id = ul.list_id WHERE ul.user_id = $1;",
+		listTableName, usersListsTable)
+	if err := r.db.Select(&items, query, userId); err != nil {
+		return nil, err
 	}
 
 	return items, nil
 }
 
-func (r *TodoListPostgres) GetById(itemId int) (structs.ToDo, error) {
+func (r *TodoListPostgres) GetById(userId, itemId int) (structs.ToDo, error) {
 	var item structs.ToDo
 
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id=$1;", listTableName)
-	if err := r.db.Get(&item, query, itemId); err != nil {
+	query := fmt.Sprintf("SELECT * FROM %s tl INNER JOIN %s ul ON tl.id = $1 WHERE ul.user_id = $2;", listTableName, usersListsTable)
+	if err := r.db.Get(&item, query, itemId, userId); err != nil {
 		return item, err
 	}
 	return item, nil
 }
 
-func (r *TodoListPostgres) Create(itemList structs.ToDo) error {
+func (r *TodoListPostgres) Create(userId int, itemList structs.ToDo) error {
 	bg, err := r.db.Begin()
 	if err != nil {
 		return err
 	}
-	query := fmt.Sprintf("INSERT INTO %s (title, description) VALUES ($1, $2);", listTableName)
-	_, err = bg.Exec(query, itemList.Title, itemList.Description)
-	if err != nil {
+	var listId int
+	createListQuery := fmt.Sprintf("INSERT INTO %s (title, description) VALUES ($1, $2) RETURNING id;", listTableName)
+	row := bg.QueryRow(createListQuery, itemList.Title, itemList.Description)
+	if err := row.Scan(&listId); err != nil {
+		bg.Rollback()
 		return err
 	}
+
+	createUsersListQuery := fmt.Sprintf("INSERT INTO %s (user_id, list_id) VALUES ($1, $2);", usersListsTable)
+	_, err = bg.Exec(createUsersListQuery, userId, listId)
+	if err != nil {
+		bg.Rollback()
+		return err
+	}
+
 	return bg.Commit()
 }
 
-func (r *TodoListPostgres) Update(itemId int, itemList structs.UpdateToDo) error {
+func (r *TodoListPostgres) Update(userId, itemId int, itemList structs.UpdateToDo) error {
 	values := make([]string, 0)
 	args := make([]interface{}, 0)
 	order := 1
@@ -71,7 +82,7 @@ func (r *TodoListPostgres) Update(itemId int, itemList structs.UpdateToDo) error
 	return err
 }
 
-func (r *TodoListPostgres) Delete(itemId int) error {
+func (r *TodoListPostgres) Delete(userId, itemId int) error {
 	query := fmt.Sprintf("DELETE FROM %s WHERE id=$1;", listTableName)
 	_, err := r.db.Exec(query, itemId)
 	return err
