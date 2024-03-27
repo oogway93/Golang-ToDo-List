@@ -95,9 +95,9 @@ func (h *Handler) getListByID(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	itemId, _ := strconv.Atoi(c.Param("id"))
+	listId, _ := strconv.Atoi(c.Param("id"))
 
-	list, err := h.services.GetById(userId, itemId)
+	list, err := h.services.GetById(userId, listId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -126,14 +126,14 @@ func (h *Handler) updateList(c *gin.Context) {
 		return
 	}
 
-	itemId, _ := strconv.Atoi(c.Param("id"))
+	listId, _ := strconv.Atoi(c.Param("id"))
 
 	var updatedListItem structs.UpdateToDo
 	if err := c.BindJSON(&updatedListItem); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	if err := h.services.Update(userId, itemId, updatedListItem); err != nil {
+	if err := h.services.Update(userId, listId, updatedListItem); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -161,9 +161,9 @@ func (h *Handler) deleteList(c *gin.Context) {
 		return
 	}
 
-	itemId, _ := strconv.Atoi(c.Param("id"))
+	listId, _ := strconv.Atoi(c.Param("id"))
 
-	err = h.services.Delete(userId, itemId)
+	err = h.services.Delete(userId, listId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

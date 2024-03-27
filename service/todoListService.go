@@ -17,15 +17,15 @@ func (s *TodoListService) GetAll(userId int) ([]structs.ToDo, error) {
 	return s.repo.GetAll(userId)
 }
 
-func (s *TodoListService) GetById(userId, itemId int) (structs.ToDo, error) {
-	return s.repo.GetById(userId, itemId)
+func (s *TodoListService) GetById(userId, listId int) (structs.ToDo, error) {
+	return s.repo.GetById(userId, listId)
 }
 
 func (s *TodoListService) Create(userId int, itemList structs.ToDo) error {
 	return s.repo.Create(userId, itemList)
 }
 
-func (s *TodoListService) Delete(userId, itemId int) error { return s.repo.Delete(userId, itemId) }
-func (s *TodoListService) Update(userId, itemId int, itemList structs.UpdateToDo) error {
-	return s.repo.Update(userId, itemId, itemList)
+func (s *TodoListService) Delete(userId, listId int) error { return s.repo.Delete(userId, listId) }
+func (s *TodoListService) Update(userId, listId int, itemList structs.UpdateToDo) error {
+	return s.repo.Update(userId, listId, itemList)
 }

@@ -18,7 +18,7 @@ func NewToDoListPostgres(db *sqlx.DB) *TodoListPostgres {
 func (r *TodoListPostgres) GetAll(userId int) ([]structs.ToDo, error) {
 	var items []structs.ToDo
 
-	query := fmt.Sprintf("SELECT * FROM %s tl INNER JOIN %s ul ON tl.id = ul.list_id WHERE ul.user_id = $1;",
+	query := fmt.Sprintf("SELECT tl.id, tl.title, tl.description FROM %s tl INNER JOIN %s ul ON tl.id = ul.list_id WHERE ul.user_id = $1;",
 		listTableName, usersListsTable)
 	if err := r.db.Select(&items, query, userId); err != nil {
 		return nil, err
@@ -27,11 +27,11 @@ func (r *TodoListPostgres) GetAll(userId int) ([]structs.ToDo, error) {
 	return items, nil
 }
 
-func (r *TodoListPostgres) GetById(userId, itemId int) (structs.ToDo, error) {
+func (r *TodoListPostgres) GetById(userId, listId int) (structs.ToDo, error) {
 	var item structs.ToDo
 
-	query := fmt.Sprintf("SELECT * FROM %s tl INNER JOIN %s ul ON tl.id = $1 WHERE ul.user_id = $2;", listTableName, usersListsTable)
-	if err := r.db.Get(&item, query, itemId, userId); err != nil {
+	query := fmt.Sprintf("SELECT tl.id, tl.title, tl.description FROM %s tl INNER JOIN %s ul ON tl.id = $1 WHERE ul.user_id = $2;", listTableName, usersListsTable)
+	if err := r.db.Get(&item, query, listId, userId); err != nil {
 		return item, err
 	}
 	return item, nil
@@ -60,7 +60,7 @@ func (r *TodoListPostgres) Create(userId int, itemList structs.ToDo) error {
 	return bg.Commit()
 }
 
-func (r *TodoListPostgres) Update(userId, itemId int, itemList structs.UpdateToDo) error {
+func (r *TodoListPostgres) Update(userId, listId int, itemList structs.UpdateToDo) error {
 	values := make([]string, 0)
 	args := make([]interface{}, 0)
 	order := 1
@@ -75,15 +75,15 @@ func (r *TodoListPostgres) Update(userId, itemId int, itemList structs.UpdateToD
 		order++
 	}
 	queryValues := strings.Join(values, ", ")
-	query := fmt.Sprintf("UPDATE %s ti SET %s WHERE ti.id=$%d;",
-		listTableName, queryValues, order)
-	args = append(args, itemId)
+	query := fmt.Sprintf("UPDATE %s ti SET %s FROM %s ul WHERE ti.id=ul.list_id AND ul.list_id=$%d AND ul.user_id=$%d;",
+		listTableName, queryValues, usersListsTable, order, order+1)
+	args = append(args, listId, userId)
 	_, err := r.db.Exec(query, args...)
 	return err
 }
 
-func (r *TodoListPostgres) Delete(userId, itemId int) error {
-	query := fmt.Sprintf("DELETE FROM %s WHERE id=$1;", listTableName)
-	_, err := r.db.Exec(query, itemId)
+func (r *TodoListPostgres) Delete(userId, listId int) error {
+	query := fmt.Sprintf("DELETE FROM %s tl USING %s ul WHERE tl.id=ul.list_id AND ul.user_id=$%d AND ul.list_id=$%d;", listTableName, usersListsTable, userId, listId)
+	_, err := r.db.Exec(query, userId, listId)
 	return err
 }

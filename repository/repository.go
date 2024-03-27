@@ -7,10 +7,10 @@ import (
 
 type ToDoList interface {
 	GetAll(userId int) ([]structs.ToDo, error)
-	GetById(userId, itemId int) (structs.ToDo, error)
+	GetById(userId, listId int) (structs.ToDo, error)
 	Create(userId int, itemList structs.ToDo) error
-	Update(userId, itemId int, itemList structs.UpdateToDo) error
-	Delete(userId, itemId int) error
+	Update(userId, listId int, itemList structs.UpdateToDo) error
+	Delete(userId, listId int) error
 }
 
 type ToDoItem interface {
