@@ -34,9 +34,13 @@ definitions:
   structs.SignInUser:
     properties:
       password:
+        minLength: 5
         type: string
+        x-order: "1"
       username:
+        minLength: 3
         type: string
+        x-order: "0"
     required:
     - password
     - username
@@ -45,8 +49,10 @@ definitions:
     properties:
       password:
         type: string
+        x-order: "1"
       username:
         type: string
+        x-order: "0"
     required:
     - password
     - username
@@ -66,8 +72,10 @@ definitions:
     properties:
       description:
         type: string
+        x-order: "1"
       title:
         type: string
+        x-order: "0"
     required:
     - title
     type: object
@@ -89,11 +97,14 @@ definitions:
     properties:
       description:
         type: string
+        x-order: "1"
       done:
         default: false
         type: boolean
+        x-order: "2"
       title:
         type: string
+        x-order: "0"
     required:
     - title
     type: object
@@ -101,8 +112,10 @@ definitions:
     properties:
       description:
         type: string
+        x-order: "1"
       title:
         type: string
+        x-order: "0"
     type: object
 host: localhost:8000
 info:

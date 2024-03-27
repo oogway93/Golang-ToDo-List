@@ -631,11 +631,15 @@ const docTemplate = `{
                 "username"
             ],
             "properties": {
-                "password": {
-                    "type": "string"
-                },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 3,
+                    "x-order": "0"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 5,
+                    "x-order": "1"
                 }
             }
         },
@@ -646,11 +650,13 @@ const docTemplate = `{
                 "username"
             ],
             "properties": {
-                "password": {
-                    "type": "string"
-                },
                 "username": {
-                    "type": "string"
+                    "type": "string",
+                    "x-order": "0"
+                },
+                "password": {
+                    "type": "string",
+                    "x-order": "1"
                 }
             }
         },
@@ -677,11 +683,13 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
-                "description": {
-                    "type": "string"
-                },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "x-order": "0"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "1"
                 }
             }
         },
@@ -712,26 +720,31 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
+                "title": {
+                    "type": "string",
+                    "x-order": "0"
+                },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "x-order": "1"
                 },
                 "done": {
                     "type": "boolean",
-                    "default": false
-                },
-                "title": {
-                    "type": "string"
+                    "default": false,
+                    "x-order": "2"
                 }
             }
         },
         "structs.UpdateToDo": {
             "type": "object",
             "properties": {
-                "description": {
-                    "type": "string"
-                },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "x-order": "0"
+                },
+                "description": {
+                    "type": "string",
+                    "x-order": "1"
                 }
             }
         }
