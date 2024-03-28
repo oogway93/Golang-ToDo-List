@@ -19,6 +19,7 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	route := gin.New()
 
+	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	auth := route.Group("/auth")
 	{
 		auth.POST("/sign-up", h.signUp)
@@ -42,6 +43,5 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			}
 		}
 	}
-	route.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	return route
 }

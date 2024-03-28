@@ -2,7 +2,6 @@ package handler_todo
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"todo_list/structs"
@@ -30,6 +29,7 @@ func (h *Handler) getList(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+
 	lists, err := h.services.ToDoList.GetAll(userId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -60,7 +60,6 @@ func (h *Handler) createList(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	logrus.Print(userId)
 	var itemList structs.ToDo
 	if err := c.BindJSON(&itemList); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -72,6 +71,7 @@ func (h *Handler) createList(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
+
 	output := successMessageResponse()
 	c.JSON(http.StatusOK, output)
 }

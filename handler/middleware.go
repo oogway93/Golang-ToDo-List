@@ -3,7 +3,6 @@ package handler_todo
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 )
@@ -45,9 +44,8 @@ func getUserId(c *gin.Context) (int, error) {
 	if !ok {
 		return 0, errors.New("id not found")
 	}
-	logrus.Println(id)
+
 	idInt, ok := id.(int)
-	logrus.Println(idInt)
 	if !ok {
 		return 0, errors.New("id is of invalid type")
 	}
