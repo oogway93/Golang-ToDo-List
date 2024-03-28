@@ -14,8 +14,8 @@ func NewToDoItemService(repo repository.ToDoItem, listRepo repository.ToDoList) 
 	return &ToDoItemService{repo: repo, listRepo: listRepo}
 }
 
-func (s *ToDoItemService) GetAll(listId int) ([]structs.ToDoItem, error) {
-	return s.repo.GetAll(listId)
+func (s *ToDoItemService) GetAll(userId, listId int) ([]structs.ToDoItem, error) {
+	return s.repo.GetAll(userId, listId)
 }
 
 func (s *ToDoItemService) Create(listId int, item structs.ToDoItem) error {

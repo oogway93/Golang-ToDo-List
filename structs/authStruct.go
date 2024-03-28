@@ -7,8 +7,8 @@ type User struct {
 }
 
 type SignUpUser struct {
-	Username string `json:"username" binding:"required" extensions:"x-order=0"`
-	Password string `json:"password" binding:"required" extensions:"x-order=1"`
+	Username string `json:"username" binding:"required" minLength:"3" extensions:"x-order=0"`
+	Password string `json:"password" binding:"required" minLength:"5" extensions:"x-order=1"`
 }
 
 type SignInUser struct {

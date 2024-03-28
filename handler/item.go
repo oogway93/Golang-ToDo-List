@@ -21,13 +21,19 @@ import (
 // @Router /api/list/{id}/item [get]
 // @Security BearerAuth
 func (h *Handler) getItem(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
 	listId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "invalid list id param")
 		return
 	}
 
-	items, err := h.services.ToDoItem.GetAll(listId)
+	items, err := h.services.ToDoItem.GetAll(userId, listId)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

@@ -14,11 +14,11 @@ func NewToDoItemPostgres(db *sqlx.DB) *ToDoItemPostgres {
 	return &ToDoItemPostgres{db}
 }
 
-func (r *ToDoItemPostgres) GetAll(listId int) ([]structs.ToDoItem, error) {
+func (r *ToDoItemPostgres) GetAll(userId, listId int) ([]structs.ToDoItem, error) {
 	var items []structs.ToDoItem
-	query := fmt.Sprintf("SELECT i.id, i.title, i.description, i.done FROM %s i INNER JOIN %s li ON li.item_id=i.id WHERE li.list_id=$1",
-		itemTableName, listItemsTableName)
-	if err := r.db.Select(&items, query, listId); err != nil {
+	query := fmt.Sprintf("SELECT i.id, i.title, i.description, i.done FROM %s i INNER JOIN %s li ON li.item_id=i.id INNER JOIN %s ul ON li.list_id=ul.list_id WHERE li.list_id=$1 AND ul.user_id=$2;",
+		itemTableName, listItemsTableName, usersListsTable)
+	if err := r.db.Select(&items, query, listId, userId); err != nil {
 		return nil, err
 	}
 	return items, nil
