@@ -71,5 +71,5 @@ func (h *Handler) createItem(c *gin.Context) {
 		return
 	}
 	output := successMessageResponse()
-	c.JSON(http.StatusOK, output)
+	c.JSON(http.StatusCreated, output)
 }

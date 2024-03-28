@@ -30,7 +30,7 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 	output := authMessageResponse()
-	c.JSON(http.StatusOK, output)
+	c.JSON(http.StatusCreated, output)
 }
 
 // @Summary Sign In User

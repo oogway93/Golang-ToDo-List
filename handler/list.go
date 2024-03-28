@@ -73,7 +73,7 @@ func (h *Handler) createList(c *gin.Context) {
 	}
 
 	output := successMessageResponse()
-	c.JSON(http.StatusOK, output)
+	c.JSON(http.StatusCreated, output)
 }
 
 // @Summary Get ToDo List
@@ -138,7 +138,7 @@ func (h *Handler) updateList(c *gin.Context) {
 		return
 	}
 	output := successMessageResponse()
-	c.JSON(http.StatusOK, output)
+	c.JSON(http.StatusCreated, output)
 }
 
 // @Summary Delete ToDo List
