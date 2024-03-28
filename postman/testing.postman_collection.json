@@ -1,0 +1,697 @@
+{
+  "info": {
+    "_postman_id": "8e5b9c77-8ac1-4cd4-8005-3d1494d11493",
+    "name": "testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26695072"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Sign-Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function(){",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Status Is Success\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"Authentication is success\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"user442\",\n    \"password\": \"123user123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/auth/sign-up",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "auth",
+                "sign-up"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sign-In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Status Is Success\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(\"token\").to.not.eql(null);",
+                  "    pm.environment.set(\"token\", data.token)",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"user442\",\n    \"password\": \"123user123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/auth/sign-in",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "auth",
+                "sign-in"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "item": [
+        {
+          "name": "Get All",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Data is null\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.data).to.eql(null);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function(){",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"List Was Created\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "    pm.environment.set(\"list_id\", 1)",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Чтение книги\",\n    \"description\": \"Толстой 'Война и мир'\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get List By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"ID\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.id).to.eql(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Title\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.title).to.eql(\"Чтение книги\");",
+                  "});",
+                  "",
+                  "pm.test(\"Description\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.description).to.eql(\"Толстой 'Война и мир'\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function(){",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Data Was Updated\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Приготовить еду\",\n    \"description\": \"Паста\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Data Was Created\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "    pm.environment.set(\"list_id\", null)",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "item",
+      "item": [
+        {
+          "name": "Create List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function(){",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"List Was Created\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "    pm.environment.set(\"list_id\", 2)",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Чтение книги\",\n    \"description\": \"Толстой 'Война и мир'\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 201\", function(){",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Item Was Created\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "    pm.environment.set(\"item_id\", 1);",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"title1\",\n    \"description\": \"description1\",\n    \"done\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}/item/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}",
+                "item",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// pm.test(\"Title\", function(){",
+                  "//     var data = pm.response.json();",
+                  "//     pm.expect(data.title).to.eql(\"title1\");",
+                  "// });",
+                  "",
+                  "// pm.test(\"Description\", function(){",
+                  "//     var data = pm.response.json();",
+                  "//     pm.expect(data.description).to.eql(\"description1\");",
+                  "// });",
+                  "",
+                  "// pm.test(\"Done\", function(){",
+                  "//     var data = pm.response.json();",
+                  "//     pm.expect(data.done).to.eql(false);",
+                  "// });"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}/item/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}",
+                "item",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status is 200\", function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"List was deleted\", function(){",
+                  "    var data = pm.response.json();",
+                  "    pm.expect(data.status).to.eql(\"success\");",
+                  "    pm.environment.set(\"list_id\", null)",
+                  "});",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:{{port}}/api/list/{{list_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "port": "{{port}}",
+              "path": [
+                "api",
+                "list",
+                "{{list_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
