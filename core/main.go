@@ -23,9 +23,9 @@ import (
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
 func main() {
-	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := godotenv.Load(); err != nil {
-		logrus.Fatal("Error loading .env file")
+		logrus.Fatal("Error loading .env file",
+			err)
 	}
 	PORT := os.Getenv("PORT")
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -38,7 +38,8 @@ func main() {
 	})
 
 	if err != nil {
-		logrus.Fatalf("Failed to initialized db: %s", err.Error())
+		logrus.Fatal("Failed to initialized db",
+			err)
 	}
 
 	repos := repository.NewRepository(db)         // db layer
@@ -48,6 +49,7 @@ func main() {
 	server := new(todo_list.Server)
 
 	if err := server.Run(PORT, handlers.InitRoutes()); err != nil {
-		logrus.Fatalf("Some errors %s", err.Error())
+		logrus.Fatal("Some errors in initialization routes",
+			err)
 	}
 }

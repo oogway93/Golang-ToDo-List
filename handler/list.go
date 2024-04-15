@@ -35,7 +35,6 @@ func (h *Handler) getList(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-
 	c.JSON(http.StatusOK, getAllListsResponse{
 		Data: lists,
 	})
@@ -71,7 +70,6 @@ func (h *Handler) createList(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-
 	output := successMessageResponse()
 	c.JSON(http.StatusCreated, output)
 }
