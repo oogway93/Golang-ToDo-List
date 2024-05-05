@@ -1,0 +1,43 @@
+version: '1.22'
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-U",
+          "postgres",
+          "-d",
+          "postgres"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - db_net
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    networks:
+      - db_net
+    ports:
+     - "8000:8000"
+    restart: on-failure
+
+networks:
+  db_net:
